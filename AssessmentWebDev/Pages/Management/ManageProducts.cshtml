@@ -1,0 +1,46 @@
+﻿@page
+@model AssessmentWebDev.Pages.Management.ManageProducts
+
+@{
+    
+}
+<table class="table-striped col-12">
+    <tr>
+        <th>ID</th>
+        <th>Naam</th>
+        <th>Prijs</th>
+        <th>Categorie</th>
+        <th>Veranderingen opslaan</th>
+        <th>Verwijderen</th>
+    </tr>
+    @foreach (var product in @Model.Products)
+    {
+        <tr>
+            <td>@product.ProductID</td>
+            <form method="post" asp-page-handler="Update">
+                <input type="hidden" name="ProductID" value="@product.ProductID"/>
+                <td><input type="text" name="ProductName" value="@product.ProductName"/></td>
+                <td><input type="number" min="0.00" max="10000.00" step="0.01" name="Price" value="@product.Price"/></td>
+                <td><select name="CategoryID" asp-items="@Model.Categories">
+                    <option value="@product.CategoryID">@product.Category.CategoryName</option>
+                </select></td>
+                <td><button class="btn btn-success" type="submit">Opslaan</button></td>
+            </form>
+            <td>
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" value="@product.ProductID"/>
+                    <button class="btn btn-danger" type="submit">Verwijderen</button> 
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+<br/>
+<div class="col-12">
+    <form method="post" asp-page-handler="Add">
+        <input type="text" name="ProductName" placeholder="Naam"/>
+        <input type="number" min="0.00" max="10000.00" step="0.01" name="Price" placeholder="Prijs"/>
+        <td><select name="CategoryID" asp-items="@Model.Categories"></select></td>
+        <td><button class="btn btn-success" type="submit">Toevoegen</button></td>
+    </form>
+</div>

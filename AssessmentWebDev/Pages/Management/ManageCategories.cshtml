@@ -1,0 +1,38 @@
+﻿@page
+@model AssessmentWebDev.Pages.Management.ManageCategories
+
+@{
+    
+}
+<table class="table-striped col-12">
+    <tr>
+        <th>ID</th>
+        <th>Naam</th>
+        <th>Opslaan</th>
+        <th>Verwijder</th>
+    </tr>
+    @foreach (var category in @Model.Categories)
+    {
+        <tr>
+            <form method="post" asp-page-handler="Update">
+                <td>@category.CategoryID</td>
+                <input name="CategoryID" value="@category.CategoryID" type="hidden"/>
+                <td><input name="Name" type="text" value="@category.CategoryName"/></td>
+                <td><button type="submit" class="btn btn-success">Save</button></td>
+            </form>
+            
+            <form method="post" asp-page-handler="Delete">
+                <td>
+                    <input name="CategoryID" value="@category.CategoryID" type="hidden"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </td>
+            </form>
+        </tr>
+    }
+</table>
+<div class="col-12">
+    <form method="post" asp-page-handler="Add">
+        <input name="Name" type="text"/>
+        <button class="btn btn-success" type="submit" placeholder="Nieuwe categorie">Toevoegen</button>
+    </form>
+</div>

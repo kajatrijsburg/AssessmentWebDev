@@ -1,0 +1,52 @@
+﻿@page
+@model AssessmentWebDev.Pages.Order.PayAll
+
+@{
+}
+<h1 class="card-title">Rekening</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped">
+                <tr>
+                    <th>Product</th>
+                    <th>Nog te betalen</th>
+                    <th>Prijs</th>
+                    <th>Totaal</th>
+                </tr>
+                @foreach (var item in @Model.order.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        @if(@item.LeftToPay() == 0){
+                            <td class="text-success">@item.LeftToPay() van @item.Count</td>
+                        }
+                        else if(@item.Paid == 0)
+                        {
+                            <td class="text-danger">@item.LeftToPay() van @item.Count</td>
+                        }
+                        else
+                        {
+                            <td class="text-warning">@item.LeftToPay() van @item.Count</td>
+                        }
+                        <td>@item.Price</td>
+                        <td>@item.LeftToPay()</td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@Model.order.TotalPriceLeft()</td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <form method="post" asp-page-handler="Pay">
+            <button class="btn btn-primary col-lg-4 col-md-6 col-sm-12" type="submit">Betalen</button>
+        </form>
+        
+    </div>
+</div>

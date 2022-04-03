@@ -1,0 +1,163 @@
+﻿@page
+@model AssessmentWebDev.Pages.Order.PayIndividually
+
+@{
+
+}
+<h1 class="card-title">Rekening</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped">
+                <tr>
+                    <th>Product</th>
+                    <th>Nog te betalen</th>
+                    <th>Prijs</th>
+                    <th>Totaal</th>
+                </tr>
+                @foreach (var item in Model.order.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        @if (item.LeftToPay() == 0)
+                        {
+                            <td>
+                                <div class="btn-toolbar">
+
+
+                                    <button type="button" class="btn btn-primary btn-group" onclick="DecreaseItem(@item.ProductID)">&lt;</button>
+                                    <span class="text-success">
+                                        <div class="d-inline" id="LeftToPay-@item.ProductID">@item.LeftToPay()</div> van <div id="Count-@item.ProductID" class="d-inline">@item.Count</div>
+                                    </span>
+                                    <button type="button" class="btn btn-primary btn-group" onclick="IncreaseItem(@item.ProductID)">&gt;</button>
+                                </div>
+                            </td>
+                        }
+                        else if (item.Paid == 0)
+                        {
+                            <td class="text-danger">
+                                <div class="btn-toolbar">
+                                    <button type="button" class="btn btn-primary btn-group" onclick="DecreaseItem(@item.ProductID)">&lt;</button>
+                                    <span class="text-danger">
+                                        <div class="d-inline" id="LeftToPay-@item.ProductID">@item.LeftToPay()</div> van <div id="Count-@item.ProductID" class="d-inline">@item.Count</div>
+                                    </span>
+                                    <button type="button" class="btn btn-primary btn-group" onclick="IncreaseItem(@item.ProductID)">&gt;</button>
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-warning">
+                                <div class="btn-toolbar">
+                                    <button type="button" class="btn btn-primary btn-group" onclick="DecreaseItem(@item.ProductID)">&lt;</button>
+                                    <span class="text-warning">
+                                        <div class="d-inline" id="LeftToPay-@item.ProductID">@item.LeftToPay()</div> van <div id="Count-@item.ProductID" class="d-inline">@item.Count</div>
+                                    </span>
+                                    <button type="button" class="btn btn-primary btn-group" onclick="IncreaseItem(@item.ProductID)">&gt;</button>
+                                </div>
+                            </td>
+                        }
+                        <td id="Price-@item.ProductID">@item.Price</td>
+                        <td><div class="d-inline" id="Total-@item.ProductID"></div></td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="AllToPay"></td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <form method="post" asp-page-handler="Pay">
+            <input  name="PaidItems" id="PaidItems"/>
+            <button class="btn btn-primary col-lg-4 col-md-6 col-sm-12" type="submit">Betalen</button>
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+function IncreaseItem(itemID){
+    const div = $('#LeftToPay-' + itemID)[0];
+    const toPay = parseInt(div.innerText);
+     if (toPay > 0){
+         div.innerText = toPay -1;
+         TotalForItem(itemID);
+         UpdateItemsToPay(itemID);
+     }
+     
+}
+
+function DecreaseItem(itemID){
+    const div = $('#LeftToPay-' + itemID)[0];
+    const divTotal = $('#Count-' + itemID)[0];
+    const toPay = parseInt(div.innerText);
+     if (toPay < divTotal.innerText){
+         div.innerText = toPay +1;
+         TotalForItem(itemID);
+         UpdateItemsToPay(itemID);
+     }
+     
+}
+
+function UpdateItemsToPay(itemID){
+    const divRemaining = $('#LeftToPay-' + itemID)[0];
+    const divCount = $('#Count-' + itemID)[0];
+    const selectedItems = parseInt(divCount.innerText) - parseInt(divRemaining.innerText);
+    const paidItemsInput = $('#PaidItems')[0];
+    var myArray;
+    
+    if (paidItemsInput.value !== ""){
+        myArray = paidItemsInput.value.split(',')
+    }else{
+        myArray = [];
+    }
+    
+    console.log(myArray);
+    let foundKey = false;
+    
+    for (let i = 0; i<myArray.length; i++){
+        if (myArray[i] === "id"+itemID+"="){
+            myArray[i+1] = selectedItems;
+            foundKey = true;
+            break;
+        }   
+    }
+    if (!foundKey){
+        myArray.push("id"+itemID+"=", selectedItems);  
+    }
+   $('#PaidItems')[0].value = myArray.toString();
+}
+
+function TotalForItem(itemID){
+    const divRemaining = $('#LeftToPay-' + itemID)[0];
+    const divCount = $('#Count-' + itemID)[0];
+    const divTotal = $('#Total-' + itemID)[0];
+    const price = parseFloat($('#Price-' + itemID)[0].innerText.replace(',','.'));
+    console.log(price)
+    const selectedItems = parseInt(divCount.innerText) - parseInt(divRemaining.innerText);
+    
+    const totalPrice = selectedItems * price
+    divTotal.innerText = totalPrice.toString().replace('.',',')
+    CompleteTotal()
+}
+
+function CompleteTotal(){
+    const prices = $('[id*=Total]');
+    let total = 0;
+    
+    for (let i = 0; i<prices.length; i++){
+        const tempPrice = parseFloat(prices[i].innerText.replace(',','.'))
+        if (!Number.isNaN(tempPrice)){
+            total +=tempPrice;
+        }
+    }
+    
+    $('#AllToPay')[0].innerText = total.toString().replace('.',',')
+}
+    
+</script>

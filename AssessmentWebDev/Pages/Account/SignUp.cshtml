@@ -2,18 +2,27 @@
 @model AssessmentWebDev.Pages.Account.SignUp
 
 @{
-    Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="card">
+    <form class="text-center col-12" method="post">
+        <div class="alert alert-warning" role="alert">
+            <strong>Let op:</strong> Gebruik niet dezelfde combinatie die u op andere website's gebruikt!
+        </div>
+        <input class="form-control" type="text" placeholder="Voornaam" asp-for="newAccountInfo.FirstName">
+        <span class="text-danger" asp-validation-for="newAccountInfo.FirstName"></span>
+        <br/>
+        <input class="form-control" type="text" placeholder="Achternaam" asp-for="newAccountInfo.LastName">
+        <span class="text-danger" asp-validation-for="newAccountInfo.LastName"></span>
+        <br/>
+        <input class="form-control center-block" type="email" placeholder="Email" asp-for="newAccountInfo.Email">
+        <span class="text-danger" asp-validation-for="newAccountInfo.Email"></span>
+        <br/>
+        <input class="form-control" type="password" placeholder="Wachtwoord" asp-for="newAccountInfo.Password">
+        <span class="text-danger" asp-validation-for="newAccountInfo.Password"></span>
+        <input class="form-control" type="password" placeholder="Herhaal Wachtwoord" asp-for="newAccountInfo.RepeatPassword">
+        <span class="text-danger" asp-validation-for="newAccountInfo.RepeatPassword"></span>
+        <br/>
+        <button class="btn btn-primary btn-sm border-0 col-6" type="submit" name="submit">Maak account aan</button>
+    </form>
 </div>
-</body>
-</html>

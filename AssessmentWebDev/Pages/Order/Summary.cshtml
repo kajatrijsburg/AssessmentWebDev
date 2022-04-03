@@ -1,0 +1,63 @@
+﻿@page
+@model AssessmentWebDev.Pages.Order.Summary
+
+@{
+    
+}
+<h1 class="card-title">Overzicht</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped">
+                <tr>
+                    <th>Product</th>
+                    <th>Hoeveelheid</th>
+                    <th>Prijs</th>
+                    <th>Totaal</th>
+                </tr>
+                @foreach (var item in @Model.order.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>
+                            <div class="btn-group">
+                                <form method="post" asp-page-handler="ItemCountDecrease">
+                                    <input type="hidden" value="@item.Count" name="Count"/>
+                                    <input type="hidden" value="@item.Paid" name="Paid"/>
+                                    <input type="hidden" value="@item.ProductID" name="ProductID"/>
+                                    <input type="hidden" value="@Model.order.OrderID" name="OrderID"/>
+                                    <button type="submit" class="btn btn-primary">&lt;</button>
+                                </form>
+
+                                <span class="btn">@item.Count</span>
+                                <form method="post" asp-page-handler="ItemCountIncrease">
+                                    <input type="hidden" value="@item.Count" name="Count"/>
+                                    <input type="hidden" value="@item.Paid" name="Paid"/>
+                                    <input type="hidden" value="@item.ProductID" name="ProductID"/>
+                                    <input type="hidden" value="@Model.order.OrderID" name="OrderID"/>
+                                    <button type="submit" class="btn btn-primary">&gt;</button>
+                                </form>
+                            </div>
+                        </td>
+                        <td>@item.Price</td>
+                        <td>@item.TotalPrice()</td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="fw-bold">@Model.order.TotalPrice()</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row btn-toolbar justify-content-end">
+        <div class="btn-group col-lg-4 col-md-6 col-sm-12">
+            <a class="btn btn-primary" asp-page="/Order/PayAll">Alles betalen</a>
+        </div>
+        <div class="btn-group col-lg-4 col-md-6 col-sm-12">
+            <a class="btn btn-primary" asp-page="/Order/PayIndividually">Per persoon betalen</a>
+        </div>
+    </div>
+</div>

@@ -30,6 +30,9 @@ public class User
     [StringLength(255)]
     public string EncryptedPassword { get; set; }
     
+    [Required]
+    public bool Approved { get; set; }
+    
 }
 
 public static class UserRoles

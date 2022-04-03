@@ -1,0 +1,93 @@
+﻿@page
+@model AssessmentWebDev.Pages.Order.Order
+
+@{
+}
+<h1 class="card-title">Bestellen</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="list-group">
+                @foreach (var category in @Model.Categories)
+                {
+                    <form>
+                        <input value="@category.CategoryID" name="CategoryID" type="hidden"/>
+                        @if (@category == @Model.SelectedCategory)
+                        {
+                            <div class="list-group-item list-group-item-action active" >@category.CategoryName</div>
+                        }
+                        else
+                        {
+                            <button class="list-group-item list-group-item-action" type="submit" asp-page-handler="SelectCategory">@category.CategoryName</button>
+                        }
+                       
+                    </form>
+                    
+                }
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="list-group">
+                @foreach (var product in @Model.Products)
+                {
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span style="text-align: left">@product.ProductName</span>
+                        <form method="post" asp-page-handler="AddToOrder">
+                            <input name="ProductID" type="hidden" value="@product.ProductID"/>
+                            <button class="btn btn-primary">Toevoegen</button>
+                        </form>
+                        
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-sm-12">
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>Product</th>
+                    <th>Hoeveelheid</th>
+                    <th></th>
+                    
+                </tr>
+                @foreach (var item in @Model.order.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>
+                            <div class="btn-group">
+                                <form method="post" asp-page-handler="ItemCountDecrease">
+                                    <input type="hidden" value="@item.Count" name="Count"/>
+                                    <input type="hidden" value="@item.Paid" name="Paid"/>
+                                    <input type="hidden" value="@item.ProductID" name="ProductID"/>
+                                    <input type="hidden" value="@Model.order.OrderID" name="OrderID"/>
+                                    <button type="submit" class="btn btn-primary">&lt;</button>
+                                </form>
+                            
+                                <span class="btn">@item.Count</span>
+                                <form method="post" asp-page-handler="ItemCountIncrease">
+                                    <input type="hidden" value="@item.Count" name="Count"/>
+                                    <input type="hidden" value="@item.Paid" name="Paid"/>
+                                    <input type="hidden" value="@item.ProductID" name="ProductID"/>
+                                    <input type="hidden" value="@Model.order.OrderID" name="OrderID"/>
+                                    <button type="submit" class="btn btn-primary">&gt;</button>
+                                </form>
+                            </div>
+                        </td>
+                        <td>
+                            <form method="post" asp-page-handler="ItemDelete">
+                                <input type="hidden" value="@item.ProductID" name="ProductID"/>
+                                <input type="hidden" value="@Model.order.OrderID" name="OrderID"/>
+                                <button type="submit" class="btn btn-danger">Verwijder</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <a asp-page="/Order/Summary" class="btn btn-primary col-lg-4 col-md-6 col-sm-12">Bestellen</a>
+    </div>
+</div>

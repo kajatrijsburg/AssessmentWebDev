@@ -1,3 +1,17 @@
+@using AssessmentWebDev.Database.Items
+
 @{
-    Layout = "_Layout";
+    if (User.IsInRole(UserRoles.Manager))
+    {
+        Layout = "Shared/_LayoutManager";
+    }
+    else if(User.IsInRole(UserRoles.Server))
+    {
+        Layout = "Shared/_LayoutServer";
+    }
+    else
+    {
+        Layout = "Shared/_LayoutAnon";
+    }
+    
 }
