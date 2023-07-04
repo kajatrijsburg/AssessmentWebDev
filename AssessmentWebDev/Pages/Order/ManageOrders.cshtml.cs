@@ -30,7 +30,7 @@ public class ManageOrders : PageModel
     public IActionResult OnPostSelectOrder(int OrderID)
     {
         HttpContext.Session.SetInt32("OrderID", OrderID);
-        return RedirectToPage("/Order/ManageOrders");
+        return RedirectToPage("/Order/Order");
     }
 
     public IActionResult OnPostDeleteOrder(int OrderID)

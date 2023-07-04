@@ -7,7 +7,7 @@ public class CategoryRepository
 {
     public int Add(Category category)
     {
-        const string sql = @"INSERT INTO category (name)
+        const string sql = @"INSERT INTO `stenden-cafe`.category (name)
                     VALUES (@CategoryName)";
 
         using var connection = new DbUtils().GetDbConnection();
@@ -16,7 +16,7 @@ public class CategoryRepository
 
     public int Delete(Category category)
     {
-        const string sql = @"DELETE FROM category WHERE category_id = @CategoryID";
+        const string sql = @"DELETE FROM `stenden-cafe`.category WHERE category_id = @CategoryID";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Execute(sql, category);
@@ -24,7 +24,7 @@ public class CategoryRepository
 
     public int Update(Category category)
     {
-        const string sql = @"UPDATE category SET name = @CategoryName WHERE category_id = @CategoryID";
+        const string sql = @"UPDATE `stenden-cafe`.category SET name = @CategoryName WHERE category_id = @CategoryID";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Execute(sql, category);
@@ -32,7 +32,7 @@ public class CategoryRepository
 
     public List<Category>? Get()
     {
-        const string sql = @"SELECT category_id AS CategoryID, name AS CategoryName FROM category";
+        const string sql = @"SELECT category_id AS CategoryID, name AS CategoryName FROM `stenden-cafe`.category";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Query<Category>(sql).ToList();

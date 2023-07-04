@@ -20,11 +20,11 @@ public class ManageProducts : PageModel
         Categories = new SelectList(categoryList, nameof(Category.CategoryID), nameof(Category.CategoryName));
     }
 
-    public IActionResult OnPostAdd(string ProductName, decimal Price, int CategoryID)
+    public IActionResult OnPostAdd(string ProductName, string Price, int CategoryID)
     {
         Product product = new();
         product.ProductName = ProductName;
-        product.Price = Price;
+        product.Price = Decimal.Parse(Price);
         product.CategoryID = CategoryID;
 
         new ProductRepository().Add(product);

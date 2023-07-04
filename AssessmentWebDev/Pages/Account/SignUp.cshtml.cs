@@ -24,7 +24,7 @@ public class SignUp : PageModel
 
         UserRepository userRepository = new UserRepository();
         userRepository.Add(newAccountInfo.ToUser());
-        return RedirectToPage("Account/Login");
+        return RedirectToPage("/Account/Login");
     }
 
     public class  NewAccountInfo

@@ -7,7 +7,7 @@ public class ProductRepository
 {
     public int Add(Product product)
     {
-        const string sql = @"INSERT INTO product (product_name, product_price, category_id)
+        const string sql = @"INSERT INTO `stenden-cafe`.product (product_name, product_price, category_id)
                     VALUES (@ProductName, @Price, @CategoryID)";
 
         using var connection = new DbUtils().GetDbConnection();
@@ -16,7 +16,7 @@ public class ProductRepository
 
     public int Delete(Product product)
     {
-        const string sql = @"DELETE FROM product WHERE product_id = @ProductID";
+        const string sql = @"DELETE FROM `stenden-cafe`.product WHERE product_id = @ProductID";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Execute(sql, product);
@@ -24,7 +24,7 @@ public class ProductRepository
 
     public int Update(Product product)
     {
-        const string sql = @"UPDATE product SET product_name = @ProductName, product_price = @Price, category_id = @CategoryID WHERE product_id = @ProductID";
+        const string sql = @"UPDATE `stenden-cafe`.product SET product_name = @ProductName, product_price = @Price, category_id = @CategoryID WHERE product_id = @ProductID";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Execute(sql, product);
@@ -34,7 +34,7 @@ public class ProductRepository
     {
         const string sql = @"SELECT p.product_id as ProductID, p.product_name as ProductName, p.product_price as Price, p.category_id AS CategoryID, 
        c.category_id AS CategoryID, c.name as CategoryName
-        FROM product p left join category c on c.category_id = p.category_id";
+        FROM `stenden-cafe`.product p left join `stenden-cafe`.category c on c.category_id = p.category_id";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Query<Product, Category, Product>(sql, (product, category) =>
@@ -48,7 +48,7 @@ public class ProductRepository
     {
         const string sql = @"SELECT p.product_id as ProductID, p.product_name as ProductName, p.product_price as Price, p.category_id AS CategoryID, 
        c.category_id AS CategoryID, c.name as CategoryName
-        FROM product p left join category c on c.category_id = p.category_id WHERE p.category_id = @categoryID";
+        FROM `stenden-cafe`.product p left join `stenden-cafe`.category c on c.category_id = p.category_id WHERE p.category_id = @categoryID";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Query<Product, Category, Product>(sql, (product, category) =>

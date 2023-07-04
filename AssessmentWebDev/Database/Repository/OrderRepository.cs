@@ -7,7 +7,7 @@ public class OrderRepository
 {
     public int Add(Order order)
     {
-        const string sql = @"INSERT INTO `order` (user_email, table_number)
+        const string sql = @"INSERT INTO `stenden-cafe`.`order` (user_email, table_number)
                     VALUES (@UserEmail, @TableNumber)";
 
         using var connection = new DbUtils().GetDbConnection();
@@ -16,8 +16,8 @@ public class OrderRepository
 
     public int Delete(int OrderID)
     {
-        const string sqlDeleteOrder = @"DELETE FROM `order` WHERE `order`.order_id = @OrderID";
-        const string sqlDeleteOrderProduct = @"DELETE FROM order_product WHERE order_id = @OrderID";
+        const string sqlDeleteOrder = @"DELETE FROM `stenden-cafe`.`order` WHERE `order`.order_id = @OrderID";
+        const string sqlDeleteOrderProduct = @"DELETE FROM `stenden-cafe`.order_product WHERE order_id = @OrderID";
         
         using var connection = new DbUtils().GetDbConnection();
         connection.Execute(sqlDeleteOrderProduct, new {OrderID});
@@ -26,7 +26,7 @@ public class OrderRepository
 
     public int Update(Order order)
     {
-        const string sql = @"UPDATE `order` SET user_email = @UserEmail, table_number = @TableNumber WHERE order_id = @OrderID";
+        const string sql = @"UPDATE `stenden-cafe`.`order` SET user_email = @UserEmail, table_number = @TableNumber WHERE order_id = @OrderID";
 
         using var connection = new DbUtils().GetDbConnection();
         return connection.Execute(sql, order);
@@ -34,7 +34,10 @@ public class OrderRepository
 
     public List<Order>? Get(string userID)
     {
-        const string sql = @"SELECT o.order_id AS OrderID, o.user_email AS UserEmail, o.table_number AS TableNumber, u.email AS Email, u.first_name AS FirstName, u.last_name AS LastName, u.role AS Role FROM `order` o left join users u ON o.user_email = u.email WHERE u.email = @userID";
+        const string sql = @"SELECT o.order_id AS OrderID, o.user_email AS UserEmail, o.table_number AS TableNumber, u.email AS Email, 
+        u.first_name AS FirstName, u.last_name AS LastName, u.role AS Role 
+        FROM `stenden-cafe`.`order` o left join `stenden-cafe`.users u ON o.user_email = u.email 
+        WHERE u.email = @userID";
 
         using var connection = new DbUtils().GetDbConnection();
         var orders = connection.Query<Order, User, Order>(sql, (order, user) =>
@@ -47,9 +50,9 @@ public class OrderRepository
         {
             const string orderItemssql = @"SELECT c.category_id AS CategoryID, c.name AS CategoryName,
                                             p.product_id AS ProductID, p.product_price AS Price, p.product_name AS ProductName, op.paid AS Paid, op.count AS Count
-                                            FROM order_product op 
-                                            LEFT JOIN product p on p.product_id = op.product_id 
-                                            LEFT JOIN category c on c.category_id = p.category_id 
+                                            FROM `stenden-cafe`.order_product op 
+                                            LEFT JOIN `stenden-cafe`.product p on p.product_id = op.product_id 
+                                            LEFT JOIN `stenden-cafe`.category c on c.category_id = p.category_id 
                                             WHERE op.order_id = @OrderID";
 
             order.Items = connection.Query<Category, Product, Product>(orderItemssql, (category, product) =>
@@ -65,7 +68,10 @@ public class OrderRepository
 
     public Order Get(int OrderID)
     {
-        const string sql = @"SELECT o.order_id AS OrderID, o.user_email AS UserEmail, o.table_number AS TableNumber, u.email AS Email, u.first_name AS FirstName, u.last_name AS LastName, u.role AS Role FROM `order` o left join users u ON o.user_email = u.email WHERE o.order_id = @OrderID";
+        const string sql = @"SELECT o.order_id AS OrderID, o.user_email AS UserEmail, o.table_number AS TableNumber, u.email AS Email, 
+            u.first_name AS FirstName, u.last_name AS LastName, u.role AS Role FROM `stenden-cafe`.`order` o 
+            left join `stenden-cafe`.users u ON o.user_email = u.email 
+            WHERE o.order_id = @OrderID";
 
         using var connection = new DbUtils().GetDbConnection();
         var order = connection.Query<Order, User, Order>(sql, (order, user) =>
@@ -77,9 +83,9 @@ public class OrderRepository
         
         const string orderItemssql = @"SELECT c.category_id AS CategoryID, c.name AS CategoryName,
                                         p.product_id AS ProductID, p.product_price AS Price, p.product_name AS ProductName, op.paid AS Paid, op.count AS Count
-                                        FROM order_product op 
-                                        LEFT JOIN product p on p.product_id = op.product_id 
-                                        LEFT JOIN category c on c.category_id = p.category_id 
+                                        FROM `stenden-cafe`.order_product op 
+                                        LEFT JOIN `stenden-cafe`.product p on p.product_id = op.product_id 
+                                        LEFT JOIN `stenden-cafe`.category c on c.category_id = p.category_id 
                                         WHERE op.order_id = @OrderID";
 
         order.Items = connection.Query<Category, Product, Product>(orderItemssql, (category, product) =>
